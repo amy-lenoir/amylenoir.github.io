@@ -5,12 +5,31 @@
     "version": "0.2.0",
     "configurations": [
         
+
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Backend",
+            "program": "${workspaceFolder}/backend/src/server.ts",
+            "preLaunchTask": "npm: dev - backend",
+            "cwd": "${workspaceFolder}/backend",
+            "console": "integratedTerminal",
+            "skipFiles": ["<node_internals>/**"]
+        },
         {
             "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome against localhost",
-            "url": "http://localhost:8080",
-            "webRoot": "${workspaceFolder}"
+            "url": "http://localhost:5173",
+            "webRoot": "${workspaceFolder}",
+            "preLaunchTask": "npm: dev - frontend"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Full Stack",
+            "configurations": ["Launch Backend", "Launch Chrome against localhost"],
+            "stopAll": true
         }
     ]
 }

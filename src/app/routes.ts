@@ -9,6 +9,7 @@ import { AIVibeProjectsPage } from './components/AIVibeProjectsPage';
 import { HomePageV2 } from './components/HomePageV2';
 import { HomePageV3 } from './components/HomePageV3';
 import { HomePageV4 } from './components/HomePageV4';
+import { AdminPanel } from '../components/Admin';
 
 export const router = createBrowserRouter([
   {
@@ -27,5 +28,9 @@ export const router = createBrowserRouter([
       { path: 'ai-vibe-projects', Component: AIVibeProjectsPage },
       { path: '*', Component: HomePage },
     ],
+  },
+  {
+    path: '/admin',
+    Component: AdminPanel,
   },
 ]);
