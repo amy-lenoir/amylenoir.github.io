@@ -1,0 +1,44 @@
+/* ── Case Study Animations ── */
+@keyframes csFadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes csFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes csSlideInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes csCountUp {
+  from { opacity: 0; transform: scale(0.8); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.cs-anim { animation: csFadeInUp 0.6s cubic-bezier(0.19, 1, 0.22, 1) forwards; opacity: 0; }
+.cs-anim-fade { animation: csFadeIn 0.8s ease forwards; opacity: 0; }
+.cs-anim-count { animation: csCountUp 0.5s cubic-bezier(0.19, 1, 0.22, 1) forwards; opacity: 0; }
+.cs-d1 { animation-delay: 0.1s; }
+.cs-d2 { animation-delay: 0.2s; }
+.cs-d3 { animation-delay: 0.3s; }
+.cs-d4 { animation-delay: 0.4s; }
+.cs-d5 { animation-delay: 0.5s; }
+.cs-d6 { animation-delay: 0.6s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cs-anim, .cs-anim-fade, .cs-anim-count { animation: none; opacity: 1; }
+}
+
+/* ── Case Study Responsive ── */
+@media (max-width: 768px) {
+  .cs-role-grid { grid-template-columns: 1fr !important; }
+  .cs-metrics-grid { grid-template-columns: 1fr 1fr !important; }
+  .cs-process-steps { grid-template-columns: 1fr 1fr !important; }
+  .cs-insights-grid { grid-template-columns: 1fr !important; }
+  .cs-opp-grid { grid-template-columns: 1fr !important; }
+  .cs-nav-grid { grid-template-columns: 1fr !important; }
+  .cs-blueprint-phases { grid-template-columns: repeat(3, 1fr) !important; }
+  .cs-blueprint-row { grid-template-columns: repeat(3, 1fr) !important; }
+  .cs-impact-eq { flex-direction: column !important; gap: 0.75rem !important; }
+  .cs-funnel-level { width: 100% !important; }
+}

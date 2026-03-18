@@ -1,0 +1,110 @@
+/* ── CSS Custom Properties from Design System ── */
+:root {
+  /* Foundation */
+  --ds-surface:        #1C1C24;
+  --ds-surface-raised: #26262F;
+  --ds-surface-sunken: #14141A;
+  --ds-surface-overlay: #32323D;
+  --ds-canvas:         #FFFFFF;
+  --ds-canvas-soft:    #F8F8FA;
+  --ds-canvas-muted:   #EDEDF0;
+
+  /* Text */
+  --ds-ink:           #FFFFFF;
+  --ds-ink-secondary: #A0A0B0;
+  --ds-ink-muted:     #6B6B7B;
+  --ds-ink-inverse:   #1C1C24;
+  --ds-ink-inverse-secondary: #4A4A5A;
+
+  /* Coral */
+  --ds-coral-50:  #FFF5F2;
+  --ds-coral-100: #FFE8E1;
+  --ds-coral-200: #FFD0C2;
+  --ds-coral-300: #FFB09A;
+  --ds-coral-400: #FF8B6A;
+  --ds-coral:     #E8553A;
+  --ds-coral-600: #CC4430;
+  --ds-coral-700: #A83727;
+
+  /* Teal */
+  --ds-teal-50:  #EDFBFA;
+  --ds-teal-100: #D4F5F3;
+  --ds-teal-200: #A8EBE7;
+  --ds-teal-400: #3DC4BD;
+  --ds-teal:     #1BA8A0;
+  --ds-teal-600: #158B84;
+  --ds-teal-700: #106E68;
+
+  /* Gold */
+  --ds-gold-50:  #FFFCF0;
+  --ds-gold-100: #FFF7D6;
+  --ds-gold-300: #FFE07A;
+  --ds-gold-400: #FFCE3A;
+  --ds-gold:     #E8B400;
+  --ds-gold-600: #C49800;
+
+  /* Lime */
+  --ds-lime-50:  #F7FDE8;
+  --ds-lime-100: #EDFACC;
+  --ds-lime-300: #C0ED5E;
+  --ds-lime:     #8BC34A;
+  --ds-lime-600: #6FA030;
+
+  /* Type */
+  --ds-font-heading: 'Satoshi', ui-sans-serif, system-ui, sans-serif;
+  --ds-font-body: 'General Sans', ui-sans-serif, system-ui, sans-serif;
+  --ds-font-lato: 'Lato', ui-sans-serif, system-ui, sans-serif;
+
+  /* Shadows */
+  --ds-shadow-subtle: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --ds-shadow-md: 0 4px 12px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.06);
+  --ds-shadow-elevated: 0 12px 40px rgba(0,0,0,0.18), 0 4px 12px rgba(0,0,0,0.08);
+  --ds-shadow-dark-subtle: 0 1px 3px rgba(0,0,0,0.3);
+  --ds-shadow-dark-elevated: 0 12px 40px rgba(0,0,0,0.5);
+}
+
+/* Grid backgrounds */
+.ds-bg-grid-dark {
+  background-color: var(--ds-surface);
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.ds-bg-grid-light {
+  background-image:
+    linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.ds-bg-grid-accent {
+  background-image:
+    linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Animations */
+@keyframes dsFadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.ds-animate-in { animation: dsFadeInUp 0.6s cubic-bezier(0.19, 1, 0.22, 1) forwards; }
+.ds-delay-1 { animation-delay: 0.1s; opacity: 0; }
+.ds-delay-2 { animation-delay: 0.2s; opacity: 0; }
+.ds-delay-3 { animation-delay: 0.3s; opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-animate-in { animation: none; opacity: 1; }
+}
+
+/* Global font application */
+html, body {
+  font-family: var(--ds-font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--ds-font-heading);
+}

@@ -1,0 +1,301 @@
+import { useState } from "react";
+
+const styles = `
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300&family=Outfit:wght@400;500&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #0b0b0b; --ink-soft: #1a1a1a; --paper: #ffffff; --muted: #7a7a7a;
+    --coral: #E0614A; --olive: #8FBF35; --sky: #5BBDD4; --gold: #F0B02A;
+  }
+  .al-wrap { font-family: 'Lato', sans-serif; background: #0b0b0b; color: #fff; }
+  .al-nav {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px; height: 72px;
+    background: rgba(11,11,11,0.92); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .al-logo { font-family: 'Lato', sans-serif; font-weight: 900; font-size: 16px; letter-spacing: 0.18em; color: #fff; }
+  .al-nav-links { display: flex; align-items: center; gap: 4px; }
+  .al-nav-link { font-family: 'Outfit', sans-serif; font-size: 14px; color: #7a7a7a; padding: 8px 16px; cursor: pointer; transition: color 0.2s; }
+  .al-nav-link:hover, .al-nav-link.active { color: #fff; }
+  .al-nav-cta { font-family: 'Outfit', sans-serif; font-size: 13px; color: #0b0b0b; background: #fff; padding: 8px 20px; margin-left: 8px; cursor: pointer; font-weight: 500; }
+
+  .al-hero {
+    background: #0b0b0b;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Cpath d='M 20 0 L 0 0 0 20' fill='none' stroke='rgba(255,255,255,0.04)' stroke-width='0.5'/%3E%3C/svg%3E");
+    min-height: 88vh; padding: 80px 40px 64px 120px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    position: relative; overflow: hidden;
+  }
+  .al-hero-geo { position: absolute; top: 60px; right: 60px; display: flex; flex-direction: column; gap: 6px; opacity: 0.2; }
+  .al-geo-lg { width: 52px; height: 42px; border: 2px solid #fff; }
+  .al-geo-sm { width: 30px; height: 24px; border: 2px solid #fff; align-self: flex-end; margin-top: 4px; }
+  .al-hero-label { font-family: 'Outfit', sans-serif; font-size: 10px; font-weight: 500; letter-spacing: 0.16em; color: #7a7a7a; text-transform: uppercase; margin-bottom: 28px; }
+  .al-hero-title { font-family: 'Lato', sans-serif; font-weight: 900; font-size: clamp(44px, 6vw, 80px); line-height: 0.88; letter-spacing: 0.4px; text-transform: uppercase; color: #fff; max-width: 800px; margin-bottom: 36px; }
+  .al-hero-since { -webkit-text-stroke: 1.5px rgba(255,255,255,0.25); color: transparent; display: block; }
+  .al-hero-sub { font-family: 'Lato', sans-serif; font-size: 15px; font-weight: 300; color: #7a7a7a; max-width: 460px; line-height: 1.8; }
+  .al-hero-logos { margin-top: 60px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; gap: 36px; flex-wrap: wrap; }
+  .al-logos-label { font-family: 'Outfit', sans-serif; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #7a7a7a; }
+  .al-logo-text { font-family: 'Lato', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.35); }
+
+  .al-about {
+    background: #fff;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Cpath d='M 20 0 L 0 0 0 20' fill='none' stroke='rgba(0,0,0,0.05)' stroke-width='0.5'/%3E%3C/svg%3E");
+    padding: 80px 40px 80px 120px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start;
+  }
+  .al-section-label { font-family: 'Outfit', sans-serif; font-size: 10px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: #7a7a7a; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+  .al-section-label::before { content: ''; width: 20px; height: 1px; background: #7a7a7a; display: block; }
+  .al-about-title { font-family: 'Playfair Display', serif; font-weight: 900; font-size: clamp(40px, 4vw, 58px); line-height: 0.9; letter-spacing: 0.4px; color: #0b0b0b; margin-bottom: 32px; }
+  .al-about-body { font-family: 'Lato', sans-serif; font-size: 16px; font-weight: 300; line-height: 1.85; color: #333; }
+  .al-about-body strong { font-weight: 700; color: #0b0b0b; }
+  .al-stats { margin-top: 44px; display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+  .al-stat { background: #0b0b0b; color: #fff; padding: 24px 20px; position: relative; }
+  .al-stat-num { font-family: 'Playfair Display', serif; font-size: 38px; font-weight: 900; line-height: 1; }
+  .al-stat-lbl { font-family: 'Outfit', sans-serif; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #7a7a7a; margin-top: 6px; }
+  .al-about-right { padding-top: 60px; }
+  .al-skill-group { margin-bottom: 28px; }
+  .al-skill-label { font-family: 'Lato', sans-serif; font-size: 16px; font-weight: 400; color: #0b0b0b; margin-bottom: 12px; }
+  .al-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .al-tag { font-family: 'Lato', sans-serif; font-size: 12px; background: #0b0b0b; color: #fff; padding: 6px 12px; border-radius: 20px; }
+  .al-tag-outline { background: transparent; color: #0b0b0b; border: 1.5px solid rgba(0,0,0,0.18); }
+
+  .al-chapter {
+    background: #E0614A;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Cpath d='M 20 0 L 0 0 0 20' fill='none' stroke='rgba(255,255,255,0.06)' stroke-width='0.5'/%3E%3C/svg%3E");
+    padding: 52px 120px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .al-chapter-text { font-family: 'Lato', sans-serif; font-weight: 900; font-size: clamp(40px, 5vw, 68px); text-transform: uppercase; line-height: 0.88; color: rgba(255,255,255,0.95); letter-spacing: 0.4px; }
+  .al-chapter-sub { margin-top: 20px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .al-chapter-tag { font-family: 'Lato', sans-serif; font-size: 12px; background: rgba(255,255,255,0.15); color: #fff; padding: 5px 12px; border-radius: 20px; }
+  .al-chapter-geo { display: flex; flex-direction: column; gap: 8px; opacity: 0.35; flex-shrink: 0; }
+  .al-cgeo-lg { width: 72px; height: 56px; border: 2.5px solid #fff; }
+  .al-cgeo-sm { width: 44px; height: 34px; border: 2.5px solid #fff; align-self: flex-end; }
+
+  .al-cases {
+    background: #fff;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Cpath d='M 20 0 L 0 0 0 20' fill='none' stroke='rgba(0,0,0,0.05)' stroke-width='0.5'/%3E%3C/svg%3E");
+    padding: 80px 40px 80px 120px;
+  }
+  .al-cases-title { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 900; color: #0b0b0b; letter-spacing: 0.3px; line-height: 0.855; margin-bottom: 52px; }
+  .al-case { display: grid; grid-template-columns: 1fr 1.1fr; gap: 36px; align-items: start; padding-bottom: 52px; border-bottom: 1px solid rgba(0,0,0,0.07); margin-bottom: 52px; }
+  .al-case:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .al-case-meta { font-family: 'Outfit', sans-serif; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #7a7a7a; margin-bottom: 8px; }
+  .al-case-org { font-family: 'Lato', sans-serif; font-size: 15px; font-weight: 700; color: #0b0b0b; margin-bottom: 2px; }
+  .al-case-proj { font-family: 'Lato', sans-serif; font-size: 14px; color: #555; margin-bottom: 14px; font-style: italic; }
+  .al-case-desc { font-family: 'Lato', sans-serif; font-size: 14px; font-weight: 300; line-height: 1.75; color: #555; margin-bottom: 16px; }
+  .al-case-btn { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 48px; border: 1.5px solid #0b0b0b; background: #fff; cursor: pointer; margin-bottom: 16px; }
+  .al-case-img { aspect-ratio: 16/10; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(0,0,0,0.1); font-family: 'Outfit', sans-serif; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #aaa; }
+
+  .al-exp {
+    background: #fff;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Cpath d='M 20 0 L 0 0 0 20' fill='none' stroke='rgba(0,0,0,0.05)' stroke-width='0.5'/%3E%3C/svg%3E");
+    padding: 0 40px 80px 120px;
+  }
+  .al-exp-title { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 900; color: #0b0b0b; margin-bottom: 44px; }
+  .al-exp-item { padding: 22px 0; border-bottom: 1px solid rgba(0,0,0,0.07); display: grid; grid-template-columns: 1fr auto; gap: 20px; max-width: 560px; }
+  .al-exp-item:first-child { padding-top: 0; }
+  .al-exp-org { font-family: 'Lato', sans-serif; font-size: 14px; font-weight: 700; color: #0b0b0b; margin-bottom: 3px; }
+  .al-exp-role { font-family: 'Lato', sans-serif; font-size: 13px; font-weight: 300; color: #444; }
+  .al-exp-date { font-family: 'Lato', sans-serif; font-size: 12px; font-style: italic; font-weight: 300; color: #7a7a7a; white-space: nowrap; }
+
+  .al-tools {
+    background: #0b0b0b;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Cpath d='M 20 0 L 0 0 0 20' fill='none' stroke='rgba(255,255,255,0.04)' stroke-width='0.5'/%3E%3C/svg%3E");
+    padding: 64px 120px;
+  }
+  .al-tools-title { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 900; color: #fff; margin-bottom: 40px; }
+  .al-tool-grid { display: flex; flex-wrap: wrap; }
+  .al-tool { width: 88px; height: 88px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 5px; border: 1px solid rgba(255,255,255,0.06); font-family: 'Outfit', sans-serif; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #7a7a7a; }
+  .al-tool-icon { font-size: 20px; }
+
+  .al-footer {
+    background: #0b0b0b;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Cpath d='M 20 0 L 0 0 0 20' fill='none' stroke='rgba(255,255,255,0.04)' stroke-width='0.5'/%3E%3C/svg%3E");
+    padding: 64px 120px; border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex; justify-content: space-between; align-items: flex-end;
+  }
+  .al-footer-name { font-family: 'Playfair Display', serif; font-size: 44px; font-weight: 900; color: #fff; line-height: 0.9; }
+  .al-footer-sub { font-family: 'Outfit', sans-serif; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #7a7a7a; margin-top: 20px; }
+  .al-footer-links { display: flex; gap: 28px; }
+  .al-footer-link { font-family: 'Outfit', sans-serif; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #7a7a7a; cursor: pointer; }
+`;
+
+const skills = {
+  Design: ["Visual Design", "Interaction Design", "Service Design", "Systems Thinking", "IA", "Accessibility", "Prototyping"],
+  Research: ["User Research", "Usability Testing", "Journey Mapping", "Ethnography", "Competitive Analysis", "Synthesis"],
+  "Product & Ops": ["Product Strategy", "Roadmapping", "OKRs", "Agile / Scrum", "Stakeholder Mgmt", "Design Ops"],
+  Methodologies: ["HCD", "Design Thinking", "Jobs To Be Done", "Lean UX", "Service Blueprint", "Co-design"],
+};
+
+const cases = [
+  { org: "Presbyterian Health & Services", role: "Portfolio Manager of Strategy and Experience", project: "Cardiology Service Design", desc: "Using HCD and service design to understand process and pain points causing low CAHPS scores in cardiology among Medicare Advantage patient-members.", tags: ["Service Design", "HCD", "Journey Mapping", "Medicare Advantage"], bg: "#f5f0eb" },
+  { org: "Mayo Clinic", role: "Director of User Experience", project: "Clinical Research — Trial Navigator", desc: "Led focused discovery to understand and reduce friction across complex clinical trial workflows, laying groundwork for a more connected, scalable experience for study teams.", tags: ["Discovery", "Workflow Design", "Clinical Research", "Systems Design"], bg: "#edf0f5" },
+];
+
+const tools = [
+  { name: "Figma", icon: "◈" }, { name: "Jira", icon: "◆" }, { name: "Aha!", icon: "◉" },
+  { name: "Notion", icon: "▣" }, { name: "Axure", icon: "◧" }, { name: "Optimal", icon: "◎" },
+  { name: "UserTesting", icon: "◐" }, { name: "Airtable", icon: "◫" }, { name: "Dovetail", icon: "◌" },
+];
+
+const experience = [
+  { org: "Radiology Partners", role: "Director of User Experience", date: "Feb–Oct 2025" },
+  { org: "Presbyterian Health & Services", role: "Portfolio Manager, Strategy + Experience", date: "Jul 2023–Feb 2025" },
+  { org: "Mayo Clinic", role: "Director of User Experience", date: "2021–2023" },
+  { org: "TRA Radiology", role: "Lead Product Designer & Manager", date: "2020–2021" },
+  { org: "Lumedic (Providence)", role: "Product Design Manager", date: "2019–2020" },
+  { org: "Providence Health & Services", role: "Principal Product Manager & Designer", date: "2017–2019" },
+];
+
+export default function AmyLanding() {
+  const [active, setActive] = useState("home");
+  return (
+    <div className="al-wrap">
+      <style>{styles}</style>
+
+      {/* NAV */}
+      <nav className="al-nav">
+        <div className="al-logo">LENOIR</div>
+        <div className="al-nav-links">
+          {["Home", "Case Studies", "Process"].map(l => (
+            <div key={l} className={`al-nav-link${active === l.toLowerCase() ? " active" : ""}`} onClick={() => setActive(l.toLowerCase())}>{l}</div>
+          ))}
+          <div className="al-nav-cta">Resume</div>
+        </div>
+      </nav>
+
+      {/* HERO */}
+      <section className="al-hero">
+        <div className="al-hero-geo">
+          <div className="al-geo-lg" />
+          <div className="al-geo-sm" />
+        </div>
+        <div className="al-hero-label">Experience Design · Healthcare + Technology · Since 2007</div>
+        <h1 className="al-hero-title">
+          Experience<br />Design Leader<br />
+          <span className="al-hero-since">Since 2007</span>
+        </h1>
+        <p className="al-hero-sub">Bridging problem definition and solution development across healthcare systems, digital products, and the teams that build them.</p>
+        <div className="al-hero-logos">
+          <span className="al-logos-label">Previously at</span>
+          {["Radiology Partners", "Presbyterian", "Mayo Clinic", "Providence", "Lumedic"].map(l => (
+            <span key={l} className="al-logo-text">{l}</span>
+          ))}
+        </div>
+      </section>
+
+      {/* ABOUT */}
+      <section className="al-about">
+        <div>
+          <div className="al-section-label">About</div>
+          <h2 className="al-about-title">Hi, I'm Amy.</h2>
+          <p className="al-about-body">
+            Through my work, I bridge the gap between <strong>problem definition</strong> and <strong>solution development</strong> — helping organizations determine which solutions to implement and the optimal path for getting there.
+            <br /><br />
+            Passionate about <strong>research-driven innovation</strong> and committed to continuous learning across industry trends and emerging technologies. Proven track record influencing organizations through <strong>product design</strong> and design thinking, <strong>building teams</strong>, and shipping innovative digital products from inception to launch.
+          </p>
+          <div className="al-stats">
+            <div className="al-stat"><div className="al-stat-num">18+</div><div className="al-stat-lbl">Years Experience</div></div>
+            <div className="al-stat" style={{background:"#1a1a1a"}}><div className="al-stat-num">22</div><div className="al-stat-lbl">Team Members Led</div></div>
+            <div className="al-stat" style={{background:"#2a2a2a"}}><div className="al-stat-num">6</div><div className="al-stat-lbl">Health Systems</div></div>
+            <div className="al-stat" style={{background:"#E0614A"}}><div className="al-stat-num">13</div><div className="al-stat-lbl">Healthcare Domains</div></div>
+          </div>
+        </div>
+        <div className="al-about-right">
+          {Object.entries(skills).map(([group, items]) => (
+            <div className="al-skill-group" key={group}>
+              <div className="al-skill-label">{group}</div>
+              <div className="al-tags">{items.map(s => <span className="al-tag" key={s}>{s}</span>)}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* HEALTHCARE CHAPTER DIVIDER */}
+      <div className="al-chapter">
+        <div>
+          <div style={{fontFamily:"'Outfit',sans-serif",fontSize:10,letterSpacing:"0.16em",textTransform:"uppercase",color:"rgba(255,255,255,0.55)",marginBottom:14}}>Domain Expertise</div>
+          <div className="al-chapter-text">Healthcare<br />Experience</div>
+          <div className="al-chapter-sub">
+            {["Cardiology","Radiology","Oncology","Telehealth","Clinical Trials","Medicare/Medicaid","AI in Healthcare"].map(d => (
+              <span key={d} className="al-chapter-tag">{d}</span>
+            ))}
+          </div>
+        </div>
+        <div className="al-chapter-geo">
+          <div className="al-cgeo-lg" />
+          <div className="al-cgeo-sm" />
+        </div>
+      </div>
+
+      {/* CASE STUDIES */}
+      <section className="al-cases">
+        <h2 className="al-cases-title">Case Studies</h2>
+        <div>
+          {cases.map((c, i) => (
+            <div className="al-case" key={i}>
+              <div>
+                <div className="al-case-btn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M7 17L17 7M17 7H7M17 7V17" stroke="#0b0b0b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+                <div className="al-case-meta">Case Study {String(i+1).padStart(2,"0")}</div>
+                <div className="al-case-org">{c.org}</div>
+                <div className="al-case-proj">{c.project}</div>
+                <p className="al-case-desc">{c.desc}</p>
+                <div className="al-tags">{c.tags.map(t => <span key={t} className="al-tag al-tag-outline">{t}</span>)}</div>
+              </div>
+              <div className="al-case-img" style={{background:c.bg}}>
+                {c.org.split(" ")[0]} · Preview
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* EXPERIENCE */}
+      <section className="al-exp">
+        <h2 className="al-exp-title">Experience</h2>
+        {experience.map((e, i) => (
+          <div className="al-exp-item" key={i}>
+            <div>
+              <div className="al-exp-org">{e.org}</div>
+              <div className="al-exp-role">{e.role}</div>
+            </div>
+            <div className="al-exp-date">{e.date}</div>
+          </div>
+        ))}
+      </section>
+
+      {/* TOOLS */}
+      <section className="al-tools">
+        <h2 className="al-tools-title">Tools</h2>
+        <div className="al-tool-grid">
+          {tools.map(t => (
+            <div className="al-tool" key={t.name}>
+              <span className="al-tool-icon">{t.icon}</span>
+              {t.name}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="al-footer">
+        <div>
+          <div className="al-footer-name">Amy<br />leNoir</div>
+          <div className="al-footer-sub">Experience Design Leader · Available for VP / Director roles</div>
+        </div>
+        <div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:20}}>
+          <div className="al-footer-links">
+            {["LinkedIn","Resume","Contact"].map(l => <span key={l} className="al-footer-link">{l}</span>)}
+          </div>
+          <div style={{fontFamily:"'Outfit',sans-serif",fontSize:10,color:"#7a7a7a",letterSpacing:"0.08em"}}>© 2025 amylenoir.com</div>
+        </div>
+      </footer>
+    </div>
+  );
+}

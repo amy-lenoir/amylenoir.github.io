@@ -1,0 +1,713 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Healthcare Experience &amp; Subspecialties</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+/* Override strong tags inside headings to maintain consistent weight */
+h1 strong,
+h2 strong,
+h3 strong {
+	font-weight: 600;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 10px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.collection-content td {
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.callout img.notion-static-icon {
+	width: 1em;
+	height: 1em;
+}
+
+.callout p {
+	margin: 0;
+}
+
+.callout h1,
+.callout h2,
+.callout h3 {
+	margin: 0 0 0.6rem;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+blockquote.quote-large {
+	font-size: 1.25em;
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.highlight-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.highlight-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.highlight-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.highlight-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.highlight-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.highlight-default_background {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray_background {
+	background: rgba(42, 28, 0, 0.07);
+}
+.highlight-brown_background {
+	background: rgba(139, 46, 0, 0.086);
+}
+.highlight-orange_background {
+	background: rgba(224, 101, 1, 0.129);
+}
+.highlight-yellow_background {
+	background: rgba(211, 168, 0, 0.137);
+}
+.highlight-teal_background {
+	background: rgba(0, 100, 45, 0.09);
+}
+.highlight-blue_background {
+	background: rgba(0, 124, 215, 0.094);
+}
+.highlight-purple_background {
+	background: rgba(102, 0, 178, 0.078);
+}
+.highlight-pink_background {
+	background: rgba(197, 0, 93, 0.086);
+}
+.highlight-red_background {
+	background: rgba(223, 22, 0, 0.094);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.block-color-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.block-color-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.block-color-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.block-color-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.block-color-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(240, 239, 237, 1);
+}
+.block-color-brown_background {
+	background: rgba(245, 237, 233, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 235, 222, 1);
+}
+.block-color-yellow_background {
+	background: rgba(249, 243, 220, 1);
+}
+.block-color-teal_background {
+	background: rgba(232, 241, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(229, 242, 252, 1);
+}
+.block-color-purple_background {
+	background: rgba(243, 235, 249, 1);
+}
+.block-color-pink_background {
+	background: rgba(250, 233, 241, 1);
+}
+.block-color-red_background {
+	background: rgba(252, 233, 231, 1);
+}
+.select-value-color-default { background-color: rgba(42, 28, 0, 0.07); }
+.select-value-color-gray { background-color: rgba(28, 19, 1, 0.11); }
+.select-value-color-brown { background-color: rgba(127, 51, 0, 0.156); }
+.select-value-color-orange { background-color: rgba(196, 88, 0, 0.203); }
+.select-value-color-yellow { background-color: rgba(209, 156, 0, 0.282); }
+.select-value-color-green { background-color: rgba(0, 96, 38, 0.156); }
+.select-value-color-blue { background-color: rgba(0, 118, 217, 0.203); }
+.select-value-color-purple { background-color: rgba(92, 0, 163, 0.141); }
+.select-value-color-pink { background-color: rgba(183, 0, 78, 0.152); }
+.select-value-color-red { background-color: rgba(206, 24, 0, 0.164); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="38e85dc9-cfa3-4549-af13-96de56361120" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">🏥</span></div><h1 class="page-title" dir="auto">Healthcare Experience &amp; Subspecialties</h1><p class="page-description" dir="auto"></p></header><div class="page-body"><div style="display:contents" dir="auto"><p id="85d878e0-fffd-44fc-96a8-ccb088f22ccd" class="">With nearly two decades in healthcare product and experience design, this page captures the breadth of clinical domains, organizational types, and healthcare subspecialties where I have hands-on experience.</p></div><div style="display:contents" dir="auto"><hr id="d6a75a18-f50b-4578-a895-3322995a6e39"/></div><div style="display:contents" dir="auto"><h2 id="8ba9111e-9988-4ed5-9072-25488b1375d1" class="">Healthcare Subspecialties</h2></div><div style="display:contents" dir="ltr"><table id="aad99878-8cb7-40f0-ade8-ce8ab36882ef" class="simple-table"><thead class="simple-table-header"><div style="display:contents" dir="ltr"><tr id="25731524-fe17-4055-b443-5f7bb7c1ddb6"><th id="_K?A" class="simple-table-header-color simple-table-header"><strong>Subspecialty</strong></th><th id="hf;Q" class="simple-table-header-color simple-table-header"><strong>Context</strong></th><th id="Zt_S" class="simple-table-header-color simple-table-header"><strong>Experience Type</strong></th></tr></div></thead><tbody><div style="display:contents" dir="ltr"><tr id="74c7bd0b-825a-46ba-86f2-6aa8057a7ea8"><th id="_K?A" class="simple-table-header-color simple-table-header">Cardiology</th><td id="hf;Q" class="">Presbyterian Health Services</td><td id="Zt_S" class="">Service design, patient access, referral workflows, CAHPS improvement</td></tr></div><div style="display:contents" dir="ltr"><tr id="e5351564-9388-4d6a-962b-963e578f039b"><th id="_K?A" class="simple-table-header-color simple-table-header">Electrophysiology (EP)</th><td id="hf;Q" class="">Presbyterian Health Services</td><td id="Zt_S" class="">Subspecialty triage, referral coordination, provider access</td></tr></div><div style="display:contents" dir="ltr"><tr id="436c8e0f-7ffd-4f24-b6fa-f867f8bbcbf8"><th id="_K?A" class="simple-table-header-color simple-table-header">Heart Failure</th><td id="hf;Q" class="">Presbyterian Health Services</td><td id="Zt_S" class="">Patient follow-up workflows, post-hospitalization care design</td></tr></div><div style="display:contents" dir="ltr"><tr id="b6a6af73-dff9-4440-8eb8-1caa8d08c88c"><th id="_K?A" class="simple-table-header-color simple-table-header">Radiology</th><td id="hf;Q" class="">Radiology Partners</td><td id="Zt_S" class="">AI integration, report generation, provider-facing tools</td></tr></div><div style="display:contents" dir="ltr"><tr id="d6f19ddc-2739-4bca-9d03-d0442eb7a130"><th id="_K?A" class="simple-table-header-color simple-table-header">Oncology</th><td id="hf;Q" class="">Mayo Clinic</td><td id="Zt_S" class="">Cancer center website redesign, patient platform</td></tr></div><div style="display:contents" dir="ltr"><tr id="2a4e78fb-84be-4f3d-a64e-169db9bebc65"><th id="_K?A" class="simple-table-header-color simple-table-header">Orthopedics &amp; Rehabilitation</th><td id="hf;Q" class="">NYU Medical Center (Rusk Rehabilitation)</td><td id="Zt_S" class="">Outpatient clinic operations, health tech piloting</td></tr></div><div style="display:contents" dir="ltr"><tr id="59f97a75-f5ab-49cc-a4ff-f2706e671ee4"><th id="_K?A" class="simple-table-header-color simple-table-header">Cardiac Rehabilitation</th><td id="hf;Q" class="">NYU Medical Center</td><td id="Zt_S" class="">Clinical operations, patient experience</td></tr></div><div style="display:contents" dir="ltr"><tr id="f8f42750-bc3a-4e25-9b79-1d9e2718781d"><th id="_K?A" class="simple-table-header-color simple-table-header">Telehealth (Low-Acuity)</th><td id="hf;Q" class="">Providence St. Joseph Health</td><td id="Zt_S" class="">Virtual care product design</td></tr></div><div style="display:contents" dir="ltr"><tr id="b604d87c-6ac6-497d-bace-4b71eb902850"><th id="_K?A" class="simple-table-header-color simple-table-header">Home Health</th><td id="hf;Q" class="">Startup</td><td id="Zt_S" class="">Zero-to-one product development</td></tr></div><div style="display:contents" dir="ltr"><tr id="6bbc5173-5bc9-472b-9193-eda440f477cc"><th id="_K?A" class="simple-table-header-color simple-table-header">Pharma &amp; Clinical Trials</th><td id="hf;Q" class="">SQAG (Enterprise)</td><td id="Zt_S" class="">Digital biomarker (grip strength dynamometer), clinical trial device management</td></tr></div><div style="display:contents" dir="ltr"><tr id="6f7ffc42-47d6-4bf8-a69d-8613b584a45e"><th id="_K?A" class="simple-table-header-color simple-table-header">Medicare / Medicaid</th><td id="hf;Q" class="">Presbyterian Health Services</td><td id="Zt_S" class="">Payer-side CX, pharmacy cost analysis</td></tr></div><div style="display:contents" dir="ltr"><tr id="27920e2d-8c2c-4b5e-9e4f-b3b0e8c3ad1b"><th id="_K?A" class="simple-table-header-color simple-table-header">Revenue Cycle</th><td id="hf;Q" class="">Providence St. Joseph Health</td><td id="Zt_S" class="">Blockchain exploration for payer systems, service design for denials</td></tr></div><div style="display:contents" dir="ltr"><tr id="fd5eadac-ce85-447e-942f-29362e11f9ea"><th id="_K?A" class="simple-table-header-color simple-table-header">AI in Healthcare</th><td id="hf;Q" class="">Radiology Partners</td><td id="Zt_S" class="">AI model evaluation, clinician-in-the-loop workflows, data quality assessment</td></tr></div></tbody></table></div><div style="display:contents" dir="auto"><h2 id="22dc634b-7969-43a9-bb14-95ff6aa5d892" class="">Organization Types</h2></div><div style="display:contents" dir="auto"><ul id="181686cb-1ebe-4030-88eb-d068e64b1c85" class="bulleted-list"><li style="list-style-type:disc"><strong>Large Health Systems</strong> — Mayo Clinic, Presbyterian Health Services</li></ul></div><div style="display:contents" dir="auto"><ul id="da257b02-722f-4fc8-9d72-a475f5382da8" class="bulleted-list"><li style="list-style-type:disc"><strong>Academic Medical Centers</strong> — NYU Medical Center</li></ul></div><div style="display:contents" dir="auto"><ul id="35897fa9-ebc6-4e4d-a236-0373fe52daa8" class="bulleted-list"><li style="list-style-type:disc"><strong>Health Tech Startups</strong> — Home health, SQAG (digital biomarker/grip strength)</li></ul></div><div style="display:contents" dir="auto"><ul id="6f167830-9705-45ba-baae-0e1b22c7e2a8" class="bulleted-list"><li style="list-style-type:disc"><strong>Payer Organizations</strong> — Presbyterian Health Plan</li></ul></div><div style="display:contents" dir="auto"><ul id="37a37140-5ffc-4add-b0ae-3db21eeeb78e" class="bulleted-list"><li style="list-style-type:disc"><strong>Provider-Facing SaaS</strong> — AI-driven radiology tools</li></ul></div><div style="display:contents" dir="auto"><ul id="f9adfa19-a161-44c0-b854-15a28289b7c1" class="bulleted-list"><li style="list-style-type:disc"><strong>B2C Health Platforms</strong> — SQAG consumer platform</li></ul></div><div style="display:contents" dir="auto"><ul id="81754c90-3c1f-40d0-86f4-e4dcc8e3d5bd" class="bulleted-list"><li style="list-style-type:disc"><strong>Consulting / Digital Transformation</strong> — Providence St. Joseph Health (blockchain &amp; RevCycle)</li></ul></div><div style="display:contents" dir="auto"><h2 id="f42e391b-18cc-4ec0-8258-8cb5fe25b11f" class="">Key Differentiators</h2></div><div style="display:contents" dir="ltr"><figure class="callout" style="white-space:pre-wrap;display:flex" id="6c1ab8a9-0b36-424f-836d-76d426cc0b1d"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><div style="display:contents" dir="auto"><p id="b054aa65-bcdb-442a-bc5a-1b2657e4f8c6" class=""><strong>Clinical roots inform design instincts.</strong> Having directed an outpatient orthopedic rehabilitation clinic at NYU, I bring a rare combination of clinical operations knowledge and design leadership to every healthcare product challenge.</p></div></div></figure></div><div style="display:contents" dir="auto"><ul id="11c909f2-4ae7-42a8-b7d9-ae76f8435300" class="bulleted-list"><li style="list-style-type:disc"><strong>Deep domain research</strong> — I go deep into each subspecialty&#x27;s problem space, earning trust from C-level clinicians and department directors who seek my guidance on complex operational and product challenges</li></ul></div><div style="display:contents" dir="auto"><ul id="93a597ee-a6bf-4f88-94bf-f64af716d806" class="bulleted-list"><li style="list-style-type:disc"><strong>Clinician-in-the-loop AI</strong> — Experience evaluating AI model readiness, training data quality (including population-specific gaps), and provider adoption challenges</li></ul></div><div style="display:contents" dir="auto"><ul id="18604ada-10e0-429b-ab68-d27d35b5062f" class="bulleted-list"><li style="list-style-type:disc"><strong>Service design for complex systems</strong> — Mapping cross-functional workflows in highly siloed, matrixed healthcare organizations</li></ul></div><div style="display:contents" dir="auto"><ul id="dbc89014-d1a1-406e-9048-2dbe89cd7660" class="bulleted-list"><li style="list-style-type:disc"><strong>HIPAA &amp; authenticated experiences</strong> — Deep understanding of compliance requirements and their impact on product design and analytics</li></ul></div><div style="display:contents" dir="auto"><ul id="ec0b9ddf-4ef6-48f5-9877-2e08613eea66" class="bulleted-list"><li style="list-style-type:disc"><strong>Healthcare digital maturity assessment</strong> — Ability to evaluate an organization&#x27;s readiness for digital transformation and set realistic expectations</li></ul></div><div style="display:contents" dir="auto"><h2 id="da08f503-ea83-4c3c-af66-cb6c3b190f40" class="">Healthcare Settings I&#x27;ve Worked Across</h2></div><div style="display:contents" dir="auto"><ul id="f8e3059b-e518-4de2-86da-ba20629aae2c" class="bulleted-list"><li style="list-style-type:disc">Inpatient &amp; outpatient clinics</li></ul></div><div style="display:contents" dir="auto"><ul id="3a9547c8-1d47-4894-9827-2ccd7dc4be4d" class="bulleted-list"><li style="list-style-type:disc">Emergency departments (cardiac ED design)</li></ul></div><div style="display:contents" dir="auto"><ul id="16a4216f-5391-4347-aa7e-15cb91ab23a4" class="bulleted-list"><li style="list-style-type:disc">Ambulatory care</li></ul></div><div style="display:contents" dir="auto"><ul id="e5482d93-3a21-4174-a651-82aaaf503a48" class="bulleted-list"><li style="list-style-type:disc">Remote patient monitoring</li></ul></div><div style="display:contents" dir="auto"><ul id="52d9fd61-79a7-4a40-8a41-61dc32c55fee" class="bulleted-list"><li style="list-style-type:disc">Virtual / telehealth visits</li></ul></div><div style="display:contents" dir="auto"><ul id="22829347-db8b-4b5f-a004-d9f6d7d23a08" class="bulleted-list"><li style="list-style-type:disc">Clinical trials</li></ul></div><div style="display:contents" dir="auto"><ul id="01aa6deb-592e-4a27-bdae-9495e15a2288" class="bulleted-list"><li style="list-style-type:disc">Health plan / payer operations</li></ul></div><div style="display:contents" dir="auto"><hr id="a5f54bec-9263-4d0e-addb-fe17fd35f864"/></div><div style="display:contents" dir="auto"><blockquote id="13d83408-1972-4bbe-9153-89cdc3471583" class=""><em>&quot;When I get into a subspecialty — cardiology, radiology, whatever it is — I go deep. I research. I understand the problem space. That&#x27;s my superpower.&quot;</em></blockquote></div></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
