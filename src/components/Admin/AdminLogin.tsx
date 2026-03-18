@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-
-const API_URL = 'http://localhost:3001/api';
+import { API_ENDPOINTS } from '../../config/api';
 
 interface AdminLoginProps {
   onLoginSuccess: (token: string) => void;
@@ -17,7 +16,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
     setError('');
 
     try {
-      const response = await fetch(`${API_URL}/auth/login`, {
+      const response = await fetch(API_ENDPOINTS.auth.login, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password }),

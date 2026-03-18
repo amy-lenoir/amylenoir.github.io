@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
-const API_URL = 'http://localhost:3001/api';
+import { API_ENDPOINTS } from '../../config/api';
 
 interface Project {
   _id: string;
@@ -38,7 +37,7 @@ export const ProjectManager: React.FC<ProjectManagerProps> = ({ token }) => {
 
   const fetchProjects = async () => {
     try {
-      const response = await fetch(`${API_URL}/portfolio/projects`);
+      const response = await fetch(API_ENDPOINTS.portfolio.projects);
       const data = await response.json();
       setProjects(data);
     } catch (err) {
@@ -57,8 +56,8 @@ export const ProjectManager: React.FC<ProjectManagerProps> = ({ token }) => {
       };
 
       const url = editingId 
-        ? `${API_URL}/portfolio/projects/${editingId}`
-        : `${API_URL}/portfolio/projects`;
+        ? `${API_ENDPOINTS.portfolio.projects}/${editingId}`
+        : API_ENDPOINTS.portfolio.projects;
       
       const method = editingId ? 'PUT' : 'POST';
 
@@ -109,7 +108,7 @@ export const ProjectManager: React.FC<ProjectManagerProps> = ({ token }) => {
   const handleDelete = async (id: string) => {
     if (confirm('Are you sure?')) {
       try {
-        const response = await fetch(`${API_URL}/portfolio/projects/${id}`, {
+        const response = await fetch(`${API_ENDPOINTS.portfolio.projects}/${id}`, {
           method: 'DELETE',
           headers: { 'Authorization': `Bearer ${token}` },
         });
