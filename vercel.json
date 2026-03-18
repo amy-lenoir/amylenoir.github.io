@@ -1,6 +1,4 @@
 {
-  "buildCommand": "npm ci --omit=optional && npm run build",
-  "installCommand": "npm install",
   "framework": "vite",
   "outputDirectory": "dist"
 }
