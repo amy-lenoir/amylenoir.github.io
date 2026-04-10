@@ -1,0 +1,541 @@
+<!--
+  ══════════════════════════════════════════════════════════
+  BLUEPRINT VIEWER — inline case study component
+  Usage: paste everything between COMPONENT START/END into a case study page.
+  Requires: the page's existing CSS variables + Satoshi/General Sans fonts.
+  ══════════════════════════════════════════════════════════
+-->
+
+<!-- DEMO WRAPPER — remove in production -->
+<style>
+  @import url('https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&f[]=general-sans@400,500,600&display=swap');
+  :root {
+    --surface:#1C1C24; --surface-raised:#26262F; --surface-sunken:#14141A;
+    --ink:#FFFFFF; --ink-muted:#6B6B7B;
+    --coral:#E8553A; --teal:#1BA8A0;
+  }
+  body { background:var(--surface); font-family:'General Sans',sans-serif; color:var(--ink); padding:40px 24px; max-width:1100px; margin:0 auto; }
+  .demo-label { font-size:11px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:12px; }
+</style>
+<p class="demo-label">— Blueprint / Service Design</p>
+<!-- END DEMO WRAPPER -->
+
+
+<!-- ════════════════════════════════════════════
+     COMPONENT START
+════════════════════════════════════════════ -->
+<style>
+.bp-viewer {
+  --bp-bg:      var(--surface-sunken, #14141A);
+  --bp-surface: var(--surface-raised, #26262F);
+  --bp-border:  rgba(255,255,255,0.07);
+  --bp-coral:   var(--coral, #E8553A);
+  --bp-teal:    var(--teal,  #1BA8A0);
+  --bp-ink:     var(--ink,   #FFFFFF);
+  --bp-muted:   var(--ink-muted, #6B6B7B);
+  --bp-r:       6px;
+
+  position: relative;
+  width: 100%;
+  border: 1px solid var(--bp-border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bp-bg);
+  font-family: 'General Sans', sans-serif;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── caption bar ── */
+.bp-bar-top {
+  height: 40px;
+  background: var(--bp-surface);
+  border-bottom: 1px solid var(--bp-border);
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  flex-shrink: 0;
+}
+.bp-caption {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  color: var(--bp-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── viewport ── */
+.bp-viewport {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  min-height: 500px;
+  overflow: hidden;
+  cursor: grab;
+  background: var(--bp-bg);
+  background-image: radial-gradient(circle, rgba(255,255,255,0.032) 1px, transparent 0);
+  background-size: 20px 20px;
+}
+.bp-viewport.bp-grabbing { cursor: grabbing; }
+
+.bp-canvas {
+  position: absolute;
+  top: 0; left: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+.bp-canvas.bp-anim {
+  transition: transform .3s cubic-bezier(.25,.46,.45,.94);
+}
+.bp-canvas img { display: block; max-width: none; }
+
+/* empty state */
+.bp-empty {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 10px; pointer-events: none;
+}
+.bp-empty.bp-hidden { display: none; }
+.bp-empty-label { font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--bp-muted); }
+.bp-empty-sub   { font-size: 11px; color: rgba(255,255,255,.18); }
+
+.bp-viewport.bp-dragover::after {
+  content: '';
+  position: absolute; inset: 0;
+  border: 2px dashed var(--bp-coral);
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* ── bottom bar ── */
+.bp-bar-bot {
+  height: 48px;
+  background: var(--bp-surface);
+  border-top: 1px solid var(--bp-border);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  flex-shrink: 0;
+}
+
+/* minimap lives in the bottom bar */
+.bp-map-wrap {
+  position: relative;
+  width: 120px;
+  height: 34px;
+  flex-shrink: 0;
+  border: 1px solid var(--bp-border);
+  border-radius: var(--bp-r);
+  overflow: hidden;
+  cursor: crosshair;
+  background: var(--bp-bg);
+}
+.bp-map-wrap img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  object-position: top left;
+  display: block;
+  opacity: .6;
+}
+.bp-map-rect {
+  position: absolute;
+  border: 1.5px solid var(--bp-coral);
+  background: rgba(232,85,58,.15);
+  border-radius: 2px;
+  cursor: grab;
+  min-width: 4px; min-height: 4px;
+}
+.bp-map-rect:active { cursor: grabbing; }
+
+.bp-sep    { width: 1px; height: 18px; background: var(--bp-border); margin: 0 2px; flex-shrink: 0; }
+.bp-spacer { flex: 1; }
+
+.bp-btn {
+  height: 28px;
+  padding: 0 9px;
+  border: 1px solid var(--bp-border);
+  border-radius: var(--bp-r);
+  background: transparent;
+  color: var(--bp-muted);
+  font-family: 'General Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .05em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background .12s, color .12s, border-color .12s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.bp-btn:hover { background: rgba(255,255,255,0.06); color: var(--bp-ink); border-color: rgba(255,255,255,0.14); }
+.bp-btn svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+.bp-zoom-val {
+  font-size: 11px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--bp-teal);
+  min-width: 36px;
+  text-align: center;
+  letter-spacing: .04em;
+  flex-shrink: 0;
+}
+
+input.bp-file { display: none; }
+</style>
+
+<div class="bp-viewer" id="bpViewer">
+
+  <input type="file" class="bp-file" id="bpFile" accept="image/*">
+
+  <!-- caption -->
+  <div class="bp-bar-top">
+    <span class="bp-caption" id="bpCaption">Service Blueprint</span>
+  </div>
+
+  <!-- viewport -->
+  <div class="bp-viewport" id="bpViewport">
+    <div class="bp-canvas" id="bpCanvas"></div>
+    <div class="bp-empty" id="bpEmpty">
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+        <rect x="3" y="7" width="34" height="26" rx="2.5" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+        <line x1="3" y1="14" x2="37" y2="14" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+        <line x1="12" y1="7" x2="12" y2="33" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+      </svg>
+      <span class="bp-empty-label">Drop image or click Open</span>
+      <span class="bp-empty-sub">PNG · JPG · SVG · WebP</span>
+    </div>
+  </div>
+
+  <!-- bottom controls -->
+  <div class="bp-bar-bot">
+
+    <!-- minimap thumbnail -->
+    <div class="bp-map-wrap" id="bpMapWrap" style="display:none">
+      <img id="bpMapImg" src="" alt="">
+      <div class="bp-map-rect" id="bpMapRect"></div>
+    </div>
+    <div class="bp-sep" id="bpMapSep" style="display:none"></div>
+
+    <!-- zoom controls -->
+    <button class="bp-btn" id="bpOut">
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <circle cx="6" cy="6" r="4.5"/><line x1="10" y1="10" x2="13" y2="13"/><line x1="4" y1="6" x2="8" y2="6"/>
+      </svg>
+    </button>
+    <span class="bp-zoom-val" id="bpZoomVal">—</span>
+    <button class="bp-btn" id="bpIn">
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <circle cx="6" cy="6" r="4.5"/><line x1="10" y1="10" x2="13" y2="13"/><line x1="6" y1="4" x2="6" y2="8"/><line x1="4" y1="6" x2="8" y2="6"/>
+      </svg>
+    </button>
+
+    <div class="bp-sep"></div>
+    <button class="bp-btn" id="bpFit">Fit</button>
+    <button class="bp-btn" id="bpFull">1:1</button>
+
+    <div class="bp-spacer"></div>
+
+    <button class="bp-btn" id="bpOpen">
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M1.5 10.5V5l2.5-2h4l3.5 3.5v4a.8.8 0 01-.8.8H2.3a.8.8 0 01-.8-.8z"/>
+        <path d="M4 3v3.5h6"/>
+      </svg>
+      Open
+    </button>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  var vp      = document.getElementById('bpViewport');
+  var canvas  = document.getElementById('bpCanvas');
+  var empty   = document.getElementById('bpEmpty');
+  var mapWrap = document.getElementById('bpMapWrap');
+  var mapImg  = document.getElementById('bpMapImg');
+  var mapRect = document.getElementById('bpMapRect');
+  var mapSep  = document.getElementById('bpMapSep');
+  var zoomVal = document.getElementById('bpZoomVal');
+  var caption = document.getElementById('bpCaption');
+  var fileIn  = document.getElementById('bpFile');
+
+  // current rendered state
+  var s = 1, tx = 0, ty = 0;
+  // easing targets
+  var ts = 1, ttx = 0, tty = 0;
+  var imgW = 0, imgH = 0, loaded = false;
+  var rafId = null;
+  var EASE  = 0.11;  // 0 = instant, 1 = never arrives — tweak here
+
+  var ZOOM_LEVELS = [.08,.1,.15,.2,.25,.33,.5,.67,.75,1,1.25,1.5,2,3,4];
+
+  // ── render ──
+  function render() {
+    canvas.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + s + ')';
+    zoomVal.textContent = Math.round(s * 100) + '%';
+    if (loaded) updateMap();
+  }
+
+  // ── easing tick ──
+  function tick() {
+    var ds = ts - s, dx = ttx - tx, dy = tty - ty;
+    if (Math.abs(ds) < 0.0008 && Math.abs(dx) < 0.15 && Math.abs(dy) < 0.15) {
+      s = ts; tx = ttx; ty = tty;
+      render();
+      rafId = null;
+      return;
+    }
+    s  += ds * EASE;
+    tx += dx * EASE;
+    ty += dy * EASE;
+    render();
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function startEase() {
+    if (!rafId) rafId = requestAnimationFrame(tick);
+  }
+
+  // stop easing and snap targets to current (used before drag)
+  function stopEase() {
+    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+    ts = s; ttx = tx; tty = ty;
+  }
+
+  // ── CSS-transition jump (fit / actual / minimap click) ──
+  function jumpTo(ns, ntx, nty) {
+    stopEase();
+    canvas.classList.add('bp-anim');
+    s = ns; tx = ntx; ty = nty;
+    ts = ns; ttx = ntx; tty = nty;
+    render();
+    setTimeout(function () { canvas.classList.remove('bp-anim'); }, 320);
+  }
+
+  // ── clamp helpers ──
+  function clampTargets() {
+    if (!loaded) return;
+    var vw = vp.offsetWidth, vh = vp.offsetHeight, m = 60;
+    ttx = Math.min(vw - m, Math.max(-(imgW * ts - m), ttx));
+    tty = Math.min(vh - m, Math.max(-(imgH * ts - m), tty));
+  }
+
+  function clampCurrent() {
+    if (!loaded) return;
+    var vw = vp.offsetWidth, vh = vp.offsetHeight, m = 60;
+    tx  = Math.min(vw - m, Math.max(-(imgW * s  - m), tx));
+    ty  = Math.min(vh - m, Math.max(-(imgH * s  - m), ty));
+    ttx = tx; tty = ty;
+  }
+
+  // ── minimap ──
+  function updateMap() {
+    var mw = mapWrap.offsetWidth, mh = mapWrap.offsetHeight;
+    var ms = Math.min(mw / imgW, mh / imgH);
+    var vw = vp.offsetWidth,     vh = vp.offsetHeight;
+    var rx = (-tx / s) * ms,     ry = (-ty / s) * ms;
+    var rw = (vw / s) * ms,      rh = (vh / s) * ms;
+    rx = Math.max(0, Math.min(mw - 4, rx));
+    ry = Math.max(0, Math.min(mh - 4, ry));
+    rw = Math.min(mw - rx, Math.max(4, rw));
+    rh = Math.min(mh - ry, Math.max(4, rh));
+    mapRect.style.left   = rx + 'px';
+    mapRect.style.top    = ry + 'px';
+    mapRect.style.width  = rw + 'px';
+    mapRect.style.height = rh + 'px';
+  }
+
+  // ── fit / actual ──
+  function fit() {
+    if (!loaded) return;
+    var vw = vp.offsetWidth, vh = vp.offsetHeight;
+    var ns = Math.min((vw * .96) / imgW, (vh * .96) / imgH);
+    jumpTo(ns, (vw - imgW * ns) / 2, (vh - imgH * ns) / 2);
+  }
+
+  function actual() {
+    if (!loaded) return;
+    jumpTo(1, (vp.offsetWidth - imgW) / 2, (vp.offsetHeight - imgH) / 2);
+  }
+
+  // ── eased zoom at point ──
+  function zoomAt(ns, cx, cy) {
+    ns = Math.max(.05, Math.min(8, ns));
+    var f = ns / ts;
+    ttx = cx - f * (cx - ttx);
+    tty = cy - f * (cy - tty);
+    ts  = ns;
+    clampTargets();
+    startEase();
+  }
+
+  function zoomStep(dir) {
+    var cx = vp.offsetWidth / 2, cy = vp.offsetHeight / 2;
+    if (dir > 0) {
+      for (var i = 0; i < ZOOM_LEVELS.length; i++)
+        if (ZOOM_LEVELS[i] > ts + .005) { zoomAt(ZOOM_LEVELS[i], cx, cy); return; }
+    } else {
+      for (var i = ZOOM_LEVELS.length - 1; i >= 0; i--)
+        if (ZOOM_LEVELS[i] < ts - .005) { zoomAt(ZOOM_LEVELS[i], cx, cy); return; }
+    }
+  }
+
+  // ── load ──
+  function loadSrc(src, name) {
+    var img = new Image();
+    img.onload = function () {
+      imgW = img.naturalWidth; imgH = img.naturalHeight;
+      loaded = true;
+      canvas.innerHTML = '';
+      canvas.appendChild(img);
+      caption.textContent = name || 'Blueprint';
+      mapImg.src = src;
+      mapWrap.style.display = '';
+      mapSep.style.display  = '';
+      empty.classList.add('bp-hidden');
+      fit();
+    };
+    img.src = src;
+  }
+
+  // ── wheel: dampen delta for gentle easing ──
+  vp.addEventListener('wheel', function (e) {
+    e.preventDefault();
+    var r  = vp.getBoundingClientRect();
+    var cx = e.clientX - r.left;
+    var cy = e.clientY - r.top;
+    // cap the per-event factor so fast scrolling isn't jarring
+    var raw    = e.deltaY;
+    var factor = 1 - Math.sign(raw) * Math.min(Math.abs(raw) * 0.0018, 0.1);
+    zoomAt(ts * factor, cx, cy);
+  }, { passive: false });
+
+  // ── drag pan ──
+  var drag = false, dx0, dy0, tx0, ty0;
+  vp.addEventListener('mousedown', function (e) {
+    if (e.button !== 0 || !loaded) return;
+    stopEase();
+    drag = true; dx0 = e.clientX; dy0 = e.clientY; tx0 = tx; ty0 = ty;
+    vp.classList.add('bp-grabbing');
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove', function (e) {
+    if (!drag) return;
+    tx = tx0 + (e.clientX - dx0);
+    ty = ty0 + (e.clientY - dy0);
+    clampCurrent();
+    render();
+  });
+  document.addEventListener('mouseup', function () {
+    drag = false;
+    vp.classList.remove('bp-grabbing');
+  });
+
+  // ── touch ──
+  var lt = null, lpd = 0;
+  vp.addEventListener('touchstart', function (e) {
+    stopEase();
+    lt = Array.from(e.touches).map(function (t) { return { x: t.clientX, y: t.clientY }; });
+    if (e.touches.length === 2)
+      lpd = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+  }, { passive: true });
+  vp.addEventListener('touchmove', function (e) {
+    e.preventDefault();
+    if (e.touches.length === 1 && lt && lt.length === 1) {
+      tx += e.touches[0].clientX - lt[0].x;
+      ty += e.touches[0].clientY - lt[0].y;
+      clampCurrent(); render();
+    } else if (e.touches.length === 2) {
+      var d  = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      var r  = vp.getBoundingClientRect();
+      var cx = ((e.touches[0].clientX + e.touches[1].clientX) / 2) - r.left;
+      var cy = ((e.touches[0].clientY + e.touches[1].clientY) / 2) - r.top;
+      var ns = Math.max(.05, Math.min(8, s * (d / lpd)));
+      var f  = ns / s;
+      tx = cx - f * (cx - tx); ty = cy - f * (cy - ty); s = ns;
+      clampCurrent(); render(); lpd = d;
+    }
+    lt = Array.from(e.touches).map(function (t) { return { x: t.clientX, y: t.clientY }; });
+  }, { passive: false });
+
+  // ── minimap drag ──
+  var mmDrag = false, mmx0, mmy0, mmtx0, mmty0;
+  mapRect.addEventListener('mousedown', function (e) {
+    e.stopPropagation();
+    stopEase();
+    mmDrag = true; mmx0 = e.clientX; mmy0 = e.clientY; mmtx0 = tx; mmty0 = ty;
+  });
+  mapWrap.addEventListener('mousedown', function (e) {
+    if (mmDrag || !loaded) return;
+    var r  = mapWrap.getBoundingClientRect();
+    var ms = Math.min(mapWrap.offsetWidth / imgW, mapWrap.offsetHeight / imgH);
+    var ix = (e.clientX - r.left) / ms, iy = (e.clientY - r.top) / ms;
+    jumpTo(s, -(ix * s) + vp.offsetWidth / 2, -(iy * s) + vp.offsetHeight / 2);
+  });
+  document.addEventListener('mousemove', function (e) {
+    if (!mmDrag) return;
+    var ms = Math.min(mapWrap.offsetWidth / imgW, mapWrap.offsetHeight / imgH);
+    tx = mmtx0 - (e.clientX - mmx0) * (1 / ms) * s;
+    ty = mmty0 - (e.clientY - mmy0) * (1 / ms) * s;
+    clampCurrent(); render();
+  });
+  document.addEventListener('mouseup', function () { mmDrag = false; });
+
+  // ── toolbar buttons ──
+  document.getElementById('bpIn') .addEventListener('click', function () { zoomStep(1);  });
+  document.getElementById('bpOut').addEventListener('click', function () { zoomStep(-1); });
+  document.getElementById('bpFit').addEventListener('click', fit);
+  document.getElementById('bpFull').addEventListener('click', actual);
+  document.getElementById('bpOpen').addEventListener('click', function () { fileIn.click(); });
+
+  fileIn.addEventListener('change', function (e) {
+    var f = e.target.files[0]; if (!f) return;
+    var r = new FileReader();
+    r.onload = function (ev) { loadSrc(ev.target.result, f.name); };
+    r.readAsDataURL(f);
+    fileIn.value = '';
+  });
+
+  // ── drop ──
+  vp.addEventListener('dragover',  function (e) { e.preventDefault(); vp.classList.add('bp-dragover'); });
+  vp.addEventListener('dragleave', function ()  { vp.classList.remove('bp-dragover'); });
+  vp.addEventListener('drop', function (e) {
+    e.preventDefault(); vp.classList.remove('bp-dragover');
+    var f = e.dataTransfer.files[0];
+    if (!f || !f.type.startsWith('image/')) return;
+    var r = new FileReader();
+    r.onload = function (ev) { loadSrc(ev.target.result, f.name); };
+    r.readAsDataURL(f);
+  });
+
+  // ── keyboard ──
+  document.getElementById('bpViewer').setAttribute('tabindex', '0');
+  document.getElementById('bpViewer').addEventListener('keydown', function (e) {
+    if (!loaded) return;
+    var h = true;
+    switch (e.key) {
+      case '+': case '=': zoomStep(1);  break;
+      case '-':           zoomStep(-1); break;
+      case '0':           fit();        break;
+      case '1':           actual();     break;
+      default: h = false;
+    }
+    if (h) e.preventDefault();
+  });
+
+  window.addEventListener('resize', function () { if (loaded) updateMap(); });
+}());
+</script>
+<!-- ════════════════════════════════════════════
+     COMPONENT END
+════════════════════════════════════════════ -->
